@@ -1,13 +1,27 @@
 const fs = require("fs");
-const createPet = (ownerId, data, cb) => {};
+const createPet = (ownerId, data, cb) => {
+  fs.readdir("./data/owners", (err, owner) => {
+    if (err) cb (err);
+    else {
+      if (owner.includes(`${ownerId}.json`)) {
+        data.forEach(pet => {
+          fs.writeFile(`data/pets/${pet.id}.json`, JSON.stringify(pet, null, 2), err => {
+            if (err) cb(err);
+          })
+        })
+        cb(null, data);
+      } else cb(null, { "error": "Please enter a valid owner" });
+    }
+    })
+};
 
 const fetchAllPets = (cb) => {
    let pets = [];
   fs.readdir("./data/pets", (err, data) => {
     if (err) cb (err);
     else {
-      for (let i = 1; i < data.length + 1; i++) {
-        fs.readFile(`data/pets/p${i}.json`, (err, contents) => {
+      for (let i = 0; i < data.length; i++) {
+        fs.readFile(`data/pets/${data[i]}`, (err, contents) => {
           if (err) cb (err);
           else {
             const parsed = JSON.parse(contents);
@@ -43,7 +57,12 @@ const fetchPetsByOwnerId = (ownerId, cb) => {
   })
 };
 
-const deletePetById = (id, cb) => {};
+const deletePetById = (id, cb) => {
+  fs.unlink(`data/pets/${id}.json`, (err, data) => {
+    if (err) cb(err);
+    else cb(null, { "msg": "Pet successfully deleted" });
+  })
+};
 
 module.exports = {
   createPet,

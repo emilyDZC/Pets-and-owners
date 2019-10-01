@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 const createOwner = (data, cb) => {
-  fs.writeFile(`./data/owners/${data.id}.json`, data, err => {
+  fs.writeFile(`./data/owners/${data.id}.json`, JSON.stringify(data, null, 2), err => {
     if (err) cb(err);
     else {
       cb(null, data);
@@ -14,8 +14,8 @@ const fetchAllOwners = cb => {
   fs.readdir("./data/owners", (err, data) => {
     if (err) cb(err);
     else {
-      for (let i = 1; i < data.length + 1; i++) {
-        fs.readFile(`data/owners/o${i}.json`, (err, contents) => {
+      for (let i = 0; i < data.length; i++) {
+        fs.readFile(`data/owners/${data[i]}`, (err, contents) => {
           if (err) cb(err);
           else {
             const parsed = JSON.parse(contents);
@@ -49,7 +49,7 @@ const updateOwner = (id, data, cb) => {
       let parsedOwner = JSON.parse(owner);
       parsedOwner.name = data.name;
       parsedOwner.age = data.age;
-      fs.writeFile(`data/owners/${id}.json`, parsedOwner, err => {
+      fs.writeFile(`data/owners/${id}.json`, JSON.stringify(parsedOwner, null, 2), err => {
         if (err) cb(err);
         else {
           cb(null, parsedOwner);
