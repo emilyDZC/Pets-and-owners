@@ -1,12 +1,17 @@
 const fs = require("fs");
+const { fetchPetsByOwnerId } = require("./pets");
 
 const createOwner = (data, cb) => {
-  fs.writeFile(`./data/owners/${data.id}.json`, JSON.stringify(data, null, 2), err => {
-    if (err) cb(err);
-    else {
-      cb(null, data);
+  fs.writeFile(
+    `./data/owners/${data.id}.json`,
+    JSON.stringify(data, null, 2),
+    err => {
+      if (err) cb(err);
+      else {
+        cb(null, data);
+      }
     }
-  })
+  );
 };
 
 const fetchAllOwners = cb => {
@@ -43,23 +48,45 @@ const fetchOwnerById = (id, cb) => {
 };
 
 const updateOwner = (id, data, cb) => {
-  fs.readFile(`./data/owners/${id}.json`, 'utf8', (err, owner) => {
+  fs.readFile(`./daa/owners/${id}.json`, "utf-8", (err, owner) => {
     if (err) cb(err);
     else {
       let parsedOwner = JSON.parse(owner);
-      parsedOwner.name = data.name;
-      parsedOwner.age = data.age;
-      fs.writeFile(`data/owners/${id}.json`, JSON.stringify(parsedOwner, null, 2), err => {
+      for (let key in data) {
+        parsedOwner[key] = data[key];
+      }
+      fs.writeFile(
+        `data/owners/${id}.json`,
+        JSON.stringify(parsedOwner, null, 2),
+        err => {
+          if (err) cb(err);
+          else {
+            cb(null, parsedOwner);
+          }
+        }
+      );
+    }
+  });
+};
+
+const deleteOwnerById = (id, cb) => {
+  fetchPetsByOwnerId(id, (err, pets) => {
+    if (err) cb(err);
+    else {
+      pets.forEach(pet => {
+        fs.unlink(`data/pets/${pet.id}.json`, err => {
+          if (err) cb(err);
+        });
+      });
+      fs.unlink(`data/owners/${id}.json`, err => {
         if (err) cb(err);
         else {
-          cb(null, parsedOwner);
+          cb(null, { msg: "user successfully deleted" })
         }
       });
     }
   });
 };
-
-const deleteOwnerById = (id, cb) => {};
 
 module.exports = {
   createOwner,

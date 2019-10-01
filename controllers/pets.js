@@ -6,9 +6,9 @@ const {
   fetchAllPets
 } = require("../models/pets.js");
 
-function getPets(req, res) {
+function getPets(req, res, next) {
   fetchAllPets((err, data) => {
-    if (err) throw err;
+    if (err) next(err);
     else {
       res.status(200);
       res.send(data);
@@ -16,10 +16,10 @@ function getPets(req, res) {
   });
 }
 
-function getPetByOwner(req, res) {
+function getPetByOwner(req, res, next) {
   const { id } = req.params;
   fetchPetsByOwnerId(id, (err, data) => {
-    if (err) throw err;
+    if (err) next(err);    
     else {
       res.status(200);
       res.send(data);
@@ -27,10 +27,10 @@ function getPetByOwner(req, res) {
   });
 }
 
-function getPetById(req, res) {
+function getPetById(req, res, next) {
   const { id } = req.params;
   fetchPetById(id, (err, data) => {
-    if (err) throw err;
+    if (err) next(err);  
     else {
       res.status(200);
       res.send(data);
@@ -38,8 +38,7 @@ function getPetById(req, res) {
   })
 }
 
-
-function addPetToOwner(req, res) {
+function addPetToOwner(req, res, next) {
   const { id } = req.params;
   let newPet = req.body.map((pet, idx) => {
     pet.id = 'p'+Date.now()+idx;
@@ -47,15 +46,15 @@ function addPetToOwner(req, res) {
     return pet;
   });
   createPet(id, newPet, (err, data) => {
-    if (err) throw err;
+    if (err) next(err);   
     else res.status(201).send(data);
   })
 }
 
-function deletePet(req, res) {
+function deletePet(req, res, next) {
   const { id } = req.params;
   deletePetById(id, (err, data) => {
-    if (err) throw err;
+    if (err) next(err);    
     else res.status(200).send(data);
   })
 }

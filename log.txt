@@ -1,0 +1,12 @@
+-=-=-=-=-=-=-=-ERROR=-=-=-=-=-=-=-
+METHOD: GET
+URL: /api/pets/
+TIME:Tue Oct 01 2019 15:58:58 GMT+0100 (British Summer Time)
+-=-=-=-=-=-=-=-ERROR=-=-=-=-=-=-=-
+METHOD: GET
+URL: /api/pets/
+TIME:Tue Oct 01 2019 15:59:10 GMT+0100 (British Summer Time)
+-=-=-=-=-=-=-=-ERROR=-=-=-=-=-=-=-
+METHOD: PATCH
+URL: /api/owners/o2
+TIME:Tue Oct 01 2019 16:02:01 GMT+0100 (British Summer Time)
